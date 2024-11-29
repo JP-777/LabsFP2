@@ -203,6 +203,8 @@ class Tablero {
     Scanner sc = new Scanner(System.in);
     List<Soldado> ejercito;
     List<Soldado> ejercitoEnemigo;
+    int columna;
+    int fila;
 
     if (numeroEjercito == 1) {
         ejercito = this.ejercito1;
@@ -213,11 +215,21 @@ class Tablero {
     }
 
     while (true) {
-        System.out.print("     Select a Position: ");
-        String posicion = sc.next();
+      while (true) {
+        System.out.print("     Select a Position (ej. A1, B3): ");
+        String posicion = sc.next();        
+        if (posicion.length() == 2 && Character.isUpperCase(posicion.charAt(0)) && Character.isDigit(posicion.charAt(1))) {
+            columna = posicion.charAt(0) - 'A' + 1;
+            fila = Character.getNumericValue(posicion.charAt(1));
 
-        int columna = ((int) posicion.charAt(0)) - 64;
-        int fila = ((int) posicion.charAt(1)) - 48;
+            System.out.println("You selected: " + posicion);
+            break;
+
+        } else {
+            System.out.println("Invalid input. Please enter a position in the format: Letter (A-Z) followed by a number (1-9).");
+        }
+    }
+
         Soldado soldadoJugado = null;
 
         for (int i = 0; i < ejercito.size(); i++) {
@@ -230,37 +242,48 @@ class Tablero {
         if (soldadoJugado != null) {
           soldadoJugado.avanzar();
           int velocidad = soldadoJugado.getVelocidad();
-          System.out.println("Soldier Velocity: " + velocidad);
-          System.out.println("From where wants to move?");
+          String option;
 
-          if (fila - velocidad > 0) {
-              System.out.println("Up     (U)");
-          }
-          if (fila + velocidad <= 10) {
-              System.out.println("Down   (D)");
-          }
-          if (columna - velocidad > 0) {
-              System.out.println("Left   (L)");
-          }
-          if (columna + velocidad <= 10) {
-              System.out.println("Right  (R)");
-          }
+          while(true){
+            System.out.println("Soldier Velocity: " + velocidad);
+            System.out.println("From where wants to move?");
 
-          char option = sc.next().charAt(0);
+            if (fila - velocidad > 0) {
+                System.out.println("Up     (U)");
+            }
+            if (fila + velocidad <= 10) {
+                System.out.println("Down   (D)");
+            }
+            if (columna - velocidad > 0) {
+                System.out.println("Left   (L)");
+            }
+            if (columna + velocidad <= 10) {
+                System.out.println("Right  (R)");
+            }
+
+            option = sc.next();
+            if (option.length() == 1 && (option.equals("U") || option.equals("D") || option.equals("L") || option.equals("R"))){
+              System.out.println("You selected: " + option);
+              break;
+            } else {
+              System.out.println("Invalid input. Please enter a valid option");
+            }
+          }
+          
           int nuevaFila = fila;
           int nuevaColumna = columna;
 
           switch (option) {
-            case 'U':
+            case "U":
                 nuevaFila -= velocidad;
                 break;
-            case 'D':
+            case "D":
                 nuevaFila += velocidad;
                 break;
-            case 'L':
+            case "L":
                 nuevaColumna -= velocidad;
                 break;
-            case 'R':
+            case "R":
                 nuevaColumna += velocidad;
                 break;
           }
@@ -325,8 +348,8 @@ class Tablero {
               soldadoJugado.setPosicionColumna(nuevaColumna);
               posicionesOcupadas.add(new int[]{nuevaFila, nuevaColumna});
           }
-
-            return;
+          soldadoJugado.defender();
+          return;
         }
         System.out.println("There are no soldiers in that position, or isn't yours.");
     }
