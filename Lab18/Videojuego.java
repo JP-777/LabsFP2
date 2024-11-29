@@ -24,7 +24,7 @@ class Videojuego{
           settings(); break;
         case 3:
           System.out.println("Exiting game...");
-          return; // Salir del programa
+          return;
         default:
           System.out.println("Invalid option. Please try again.");
           break;
@@ -75,7 +75,7 @@ class Videojuego{
           gameVelocity = sc.nextInt();
           break;
         case 3:
-          mapEffects = !mapEffects; // Toggle map effects
+          mapEffects = !mapEffects;
           System.out.println("Map Effects: " + (mapEffects ? "Enabled" : "Disabled"));
           break;
         case 4:
@@ -92,7 +92,7 @@ class Videojuego{
     board.generarEjercitos();
 
     for(int i = 0; i >= 0; i++){
-      board.mostrarDatosEjercitos();
+      board.mostrarInterfaz();
 
       if(i % 2 == 0){
         System.out.println("     >---PLAYER 1 TURN---<");

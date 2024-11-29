@@ -3,15 +3,15 @@ import java.util.*;
 class Tablero {
   private List<Soldado> ejercito1;
   private List<Soldado> ejercito2;
+  private List<int[]> posicionesOcupadas;
 
   public Tablero(){
     this.ejercito1 = new ArrayList<>();
     this.ejercito2 = new ArrayList<>();
+    this.posicionesOcupadas = new ArrayList<>();
   }
 
     public void generarEjercitos() {
-
-      List<int[]> posicionesOcupadas = new ArrayList<>();
 
       for(int i = 0; i < 2; i++){
         List<Soldado> ejercito;
@@ -30,25 +30,9 @@ class Tablero {
           int posicionFila = (int) (Math.random() * 10 + 1);
           int posicionColumna = (int) (Math.random() * 10 + 1);
           
-          boolean posicionOcupada = false;
-          for (int[] posicion : posicionesOcupadas) {
-              if (posicion[0] == posicionFila && posicion[1] == posicionColumna) {
-                  posicionOcupada = true;
-                  break;
-              }
-          }
-
-          while (posicionOcupada) {
-              posicionFila = (int) (Math.random() * 10 + 1);
-              posicionColumna = (int) (Math.random() * 10 + 1);
-            
-              posicionOcupada = false;
-              for (int[] posicion : posicionesOcupadas) {
-                  if (posicion[0] == posicionFila && posicion[1] == posicionColumna) {
-                      posicionOcupada = true;
-                      break;
-                  }
-              }
+          while (posicionEstaOcupada(posicionFila, posicionColumna)) {
+            posicionFila = (int) (Math.random() * 10 + 1);
+            posicionColumna = (int) (Math.random() * 10 + 1);
           }
 
           posicionesOcupadas.add(new int[]{posicionFila, posicionColumna});
@@ -97,6 +81,8 @@ class Tablero {
       } else {
         if(this.ejercito1.get(i).getActitud().substring(0,1).equals("O")){
           System.out.print(" "+this.ejercito1.get(i).getActitud()+"  ");
+        } else if(this.ejercito1.get(i).getActitud().equals("Dead")){
+          System.out.print("     "+this.ejercito1.get(i).getActitud()+"      ");
         } else if(this.ejercito1.get(i).getActitud().substring(0,1).equals("D")){
           System.out.print(" "+this.ejercito1.get(i).getActitud()+" ");
         } else {
@@ -141,6 +127,8 @@ class Tablero {
         } else {
           if(this.ejercito2.get(i).getActitud().substring(0,1).equals("O")){
             System.out.print(" "+this.ejercito2.get(i).getActitud()+"  ");
+          } else if(this.ejercito2.get(i).getActitud().equals("Dead")){
+            System.out.print("    "+this.ejercito2.get(i).getActitud()+"    ");
           } else if(this.ejercito2.get(i).getActitud().substring(0,1).equals("D")){
             System.out.print(" "+this.ejercito2.get(i).getActitud()+" ");
           } else {
@@ -211,65 +199,146 @@ class Tablero {
       System.out.print("|");
   }
 
-  public void movimiento(int numeroEjercito){
+  public void movimiento(int numeroEjercito) {
     Scanner sc = new Scanner(System.in);
     List<Soldado> ejercito;
+    List<Soldado> ejercitoEnemigo;
 
-    if(numeroEjercito == 1){
-      ejercito = this.ejercito1;
+    if (numeroEjercito == 1) {
+        ejercito = this.ejercito1;
+        ejercitoEnemigo = this.ejercito2;
     } else {
-      ejercito = this.ejercito2;
+        ejercito = this.ejercito2;
+        ejercitoEnemigo = this.ejercito1;
     }
-    
-    while(true){
-      System.out.print("     Select a Position: ");
-      String posicion = sc.next();
 
-      int columna = ((int) posicion.charAt(0)) - 64;
-      int fila = ((int) posicion.charAt(1)) - 48;
-      Soldado soldadoJugado;
+    while (true) {
+        System.out.print("     Select a Position: ");
+        String posicion = sc.next();
 
-      for(int i = 0; i < ejercito.size(); i++){
-      
-        if(ejercito.get(i).getPosicionFila() == fila && ejercito.get(i).getPosicionColumna() == columna){
-          soldadoJugado = ejercito.get(i);
+        int columna = ((int) posicion.charAt(0)) - 64;
+        int fila = ((int) posicion.charAt(1)) - 48;
+        Soldado soldadoJugado = null;
+
+        for (int i = 0; i < ejercito.size(); i++) {
+          if (ejercito.get(i).getPosicionFila() == fila && ejercito.get(i).getPosicionColumna() == columna) {
+              soldadoJugado = ejercito.get(i);
+              break;
+          }
+        }
+
+        if (soldadoJugado != null) {
           soldadoJugado.avanzar();
           int velocidad = soldadoJugado.getVelocidad();
-        
           System.out.println("Soldier Velocity: " + velocidad);
           System.out.println("From where wants to move?");
 
-          if (fila - velocidad > 0){
-            System.out.println("Up     (U)");
-          } 
-          if (fila + velocidad <= 10){
-            System.out.println("Down   (D)");
+          if (fila - velocidad > 0) {
+              System.out.println("Up     (U)");
           }
-          if (columna - velocidad > 0){
-            System.out.println("Left   (L)");
+          if (fila + velocidad <= 10) {
+              System.out.println("Down   (D)");
           }
-          if (columna + velocidad <= 10){
-            System.out.println("Right  (R)");
+          if (columna - velocidad > 0) {
+              System.out.println("Left   (L)");
+          }
+          if (columna + velocidad <= 10) {
+              System.out.println("Right  (R)");
           }
 
           char option = sc.next().charAt(0);
-          switch(option){
+          int nuevaFila = fila;
+          int nuevaColumna = columna;
+
+          switch (option) {
             case 'U':
-              soldadoJugado.setPosicionFila(soldadoJugado.getPosicionFila() - velocidad); break;
+                nuevaFila -= velocidad;
+                break;
             case 'D':
-              soldadoJugado.setPosicionFila(soldadoJugado.getPosicionFila() + velocidad); break;
+                nuevaFila += velocidad;
+                break;
             case 'L':
-              soldadoJugado.setPosicionColumna(soldadoJugado.getPosicionColumna() - velocidad); break;
+                nuevaColumna -= velocidad;
+                break;
             case 'R':
-              soldadoJugado.setPosicionColumna(soldadoJugado.getPosicionColumna() + velocidad); break;
+                nuevaColumna += velocidad;
+                break;
           }
-          
-          soldadoJugado.defender();
-          return;
+
+          boolean posicionOcupada = false;
+          for (int[] posicionOcupa : posicionesOcupadas) {
+            if (posicionOcupa[0] == nuevaFila && posicionOcupa[1] == nuevaColumna) {
+                posicionOcupada = true;
+                break;
+            }
+          }
+
+          if (posicionOcupada) {
+              for (Soldado soldado : ejercito) {
+                  if (soldado.getPosicionFila() == nuevaFila && soldado.getPosicionColumna() == nuevaColumna) {
+                      System.out.println("Warning: Soldier from your army is already at this position!");
+                      return;
+                  }
+              }
+
+              System.out.println("Battle! A soldier from the enemy army is at this position!");
+
+              Random rand = new Random();
+              boolean soldadoGano = rand.nextBoolean();
+
+              Soldado soldadoEnemigo =  null;
+
+              for(int i = 0; i < ejercitoEnemigo.size(); i++){
+                if(ejercitoEnemigo.get(i).getPosicionFila() == nuevaFila && ejercitoEnemigo.get(i).getPosicionColumna() == nuevaColumna){
+                  soldadoEnemigo = ejercitoEnemigo.get(i);
+                }
+              }
+
+              if (soldadoGano) {
+                  System.out.println("You won the battle! The enemy soldier is defeated.");
+                  soldadoJugado.setPosicionFila(nuevaFila);
+                  soldadoJugado.setPosicionColumna(nuevaColumna);
+
+                  soldadoEnemigo.morir();
+
+                  for (int i = 0; i < posicionesOcupadas.size(); i++) {
+                    int[] pos = posicionesOcupadas.get(i);
+                    if (pos[0] == nuevaFila && pos[1] == nuevaColumna) {
+                        posicionesOcupadas.remove(i);
+                        break;
+                    }
+                }
+                  posicionesOcupadas.add(new int[]{nuevaFila, nuevaColumna});
+              } else {
+                  System.out.println("You lost the battle! Your soldier is defeated.");
+                  soldadoJugado.morir();
+                  for (int i = 0; i < posicionesOcupadas.size(); i++) {
+                    int[] pos = posicionesOcupadas.get(i);
+                    if (pos[0] == fila && pos[1] == columna) {
+                        posicionesOcupadas.remove(i);
+                        break;
+                    }
+                }
+              }
+          } else {
+              soldadoJugado.setPosicionFila(nuevaFila);
+              soldadoJugado.setPosicionColumna(nuevaColumna);
+              posicionesOcupadas.add(new int[]{nuevaFila, nuevaColumna});
+          }
+
+            return;
         }
-      }
-      System.out.println("There are no soldiers in that position, or isnt yours");
+        System.out.println("There are no soldiers in that position, or isn't yours.");
     }
+  }
+
+  private boolean posicionEstaOcupada(int fila, int columna) {
+    for (int[] posicion : posicionesOcupadas) {
+        if (posicion[0] == fila && posicion[1] == columna) {
+            return true;
+        }
+    }
+    return false;
   }
 
   public List<Soldado> getEjercito1 (){

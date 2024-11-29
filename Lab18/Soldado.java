@@ -53,7 +53,9 @@ class Soldado {
     }
 
     public void morir() {
-        System.out.println("Ay creo que ya se murió");
+        this.actitud = "Dead";
+        this.posicionColumna = -1;
+        this.posicionFila = -1;
     }
 
     public void setVidaActual(int vidaActual) {
@@ -87,7 +89,7 @@ class Soldado {
     public void setPosicionColumna(int nuevaPosicion) {
         this.posicionColumna = nuevaPosicion;
     }
-    
+
     public String getActitud(){
         return this.actitud;
     }
