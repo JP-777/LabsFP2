@@ -53,14 +53,16 @@ class Tablero {
     }
 
   public void mostrarInterfaz() {
-    System.out.print(  "     +--------------------------+                                               +--------------------------+\n"+
-                       "     |           ARMY1          |     A   B   C   D   E   F   G   H   I   J     |           ARMY2          |\n"+
-                       "     +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+\n"+
-                       "     |   Soldier   |   Status   | 1 "); dibujarTablero(0); System.out.println(" 1 |   Soldier   |   Status   |");
-    System.out.println("     +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+");
+
+    System.out.print(  "██                                                                                                             ██\n"+
+                       "██   +--------------------------+                                               +--------------------------+   ██\n"+
+                       "██   |           ARMY1          |     A   B   C   D   E   F   G   H   I   J     |           ARMY2          |   ██\n"+
+                       "██   +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+   ██\n"+
+                       "██   |   Soldier   |   Status   | 1 "); dibujarTablero(0); System.out.println(" 1 |   Soldier   |   Status   |   ██");
+    System.out.println("██   +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+   ██");
 
     for (int i = 0; i < 10; i++) {
-      System.out.print("     |");
+      System.out.print("██   |");
 
       if(i >= ejercito1.size()){
         System.out.print("             ");
@@ -136,8 +138,8 @@ class Tablero {
           }
         }
         
-        System.out.print("|");
-        System.out.println("\n     +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+");
+        System.out.print("|   ██");
+        System.out.println("\n██   +-------------+------------+   +---+---+---+---+---+---+---+---+---+---+   +-------------+------------+   ██");
 
       } else {
 
@@ -169,10 +171,11 @@ class Tablero {
           }
         }
         
-        System.out.print("|");
-        System.out.println("\n     +-------------+------------+                                               +-------------+------------+");
+        System.out.print("|   ██");
+        System.out.println("\n██   +-------------+------------+                                               +-------------+------------+   ██");
       }
     }
+    System.out.println("█████████████████████████████████████████████████████████████████████████████████████████████████████████████████\n");
   }
   
   public void dibujarTablero(int i) {
@@ -305,11 +308,8 @@ class Tablero {
               }
 
               System.out.println("Battle! A soldier from the enemy army is at this position!");
-
-              Random rand = new Random();
-              boolean soldadoGano = rand.nextBoolean();
-
               Soldado soldadoEnemigo =  null;
+              librarBatalla(soldadoJugado, soldadoEnemigo, fila, columna, nuevaFila, nuevaColumna);
 
               for(int i = 0; i < ejercitoEnemigo.size(); i++){
                 if(ejercitoEnemigo.get(i).getPosicionFila() == nuevaFila && ejercitoEnemigo.get(i).getPosicionColumna() == nuevaColumna){
@@ -317,32 +317,7 @@ class Tablero {
                 }
               }
 
-              if (soldadoGano) {
-                  System.out.println("You won the battle! The enemy soldier is defeated.");
-                  soldadoJugado.setPosicionFila(nuevaFila);
-                  soldadoJugado.setPosicionColumna(nuevaColumna);
 
-                  soldadoEnemigo.morir();
-
-                  for (int i = 0; i < posicionesOcupadas.size(); i++) {
-                    int[] pos = posicionesOcupadas.get(i);
-                    if (pos[0] == nuevaFila && pos[1] == nuevaColumna) {
-                        posicionesOcupadas.remove(i);
-                        break;
-                    }
-                }
-                  posicionesOcupadas.add(new int[]{nuevaFila, nuevaColumna});
-              } else {
-                  System.out.println("You lost the battle! Your soldier is defeated.");
-                  soldadoJugado.morir();
-                  for (int i = 0; i < posicionesOcupadas.size(); i++) {
-                    int[] pos = posicionesOcupadas.get(i);
-                    if (pos[0] == fila && pos[1] == columna) {
-                        posicionesOcupadas.remove(i);
-                        break;
-                    }
-                }
-              }
           } else {
               soldadoJugado.setPosicionFila(nuevaFila);
               soldadoJugado.setPosicionColumna(nuevaColumna);
@@ -353,6 +328,64 @@ class Tablero {
         }
         System.out.println("There are no soldiers in that position, or isn't yours.");
     }
+  }
+
+  private void librarBatalla(Soldado soldadoJugado, Soldado soldadoEnemigo, int fila, int columna, int nuevaFila, int nuevaColumna) {
+    Random rand = new Random();
+    boolean soldadoGano = rand.nextBoolean();
+
+    if (soldadoGano) {
+        System.out.println("You won the battle! The enemy soldier is defeated.");
+        soldadoJugado.setPosicionFila(nuevaFila);
+        soldadoJugado.setPosicionColumna(nuevaColumna);
+        soldadoEnemigo.morir();
+        
+        for (int i = 0; i < posicionesOcupadas.size(); i++) {
+          int[] pos = posicionesOcupadas.get(i);
+          if (pos[0] == nuevaFila && pos[1] == nuevaColumna) {
+              posicionesOcupadas.remove(i);
+              break;
+          }
+        }
+        posicionesOcupadas.add(new int[]{nuevaFila, nuevaColumna});
+    } else {
+        System.out.println("You lost the battle! Your soldier is defeated.");
+        soldadoJugado.morir();
+        for (int i = 0; i < posicionesOcupadas.size(); i++) {
+          int[] pos = posicionesOcupadas.get(i);
+          if (pos[0] == fila && pos[1] == columna) {
+              posicionesOcupadas.remove(i);
+              break;
+          }
+        }
+    }
+  }
+
+  public boolean todosLosSoldadosMuertos() {
+    
+    for(int i = 0; i < ejercito1.size(); i++){
+      int deaths = 0;
+      if(ejercito1.get(i).getActitud() == "Dead"){
+        deaths++;
+      }
+      if(deaths == ejercito1.size()){
+        System.out.println("El ganador es el Ejercito 2");
+        return true;
+      }
+    }
+
+    for(int i = 0; i < ejercito2.size(); i++){
+      int deaths = 0;
+      if(ejercito2.get(i).getActitud() == "Dead"){
+        deaths++;
+      }
+      if(deaths == ejercito2.size()){
+        System.out.println("El ganador es el Ejercito 1");
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private boolean posicionEstaOcupada(int fila, int columna) {

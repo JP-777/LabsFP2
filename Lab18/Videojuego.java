@@ -8,14 +8,26 @@ class Videojuego{
 
   public static void main(String[] args) {
 
+    System.out.println("█████████████████████████████████████████████████████████████████████████████████████████████████████████████████\n"+
+                       "██                           _      _         _    _     _      _              __  __                          ██\n"+
+                       "██                          | |    | |___ _ _| |__| |   | |    | | _ _ _ __    \\ \\/ /                          ██\n"+
+                       "██                          | | /\\ | / _ | '_| / _` |   | | /\\ | / _' | `__|    \\  /                           ██\n"+
+                       "██                          |  V  V  |(_)| | || (_| |   |  V  V  |(_| | |       /  \\                           ██\n"+
+                       "██                           \\__/\\__/\\___|_| |_\\__,_|    \\__/\\__/\\__,_|_|      /_/\\_\\                          ██\n"+
+                       "██                                                                                                             ██\n"+
+                       "█████████████████████████████████████████████████████████████████████████████████████████████████████████████████");
+
     while(true){
 
-      System.out.println("|<>-<>| WORLD WAR X |<>-<>|");
-      System.out.println("\n        OPTIONS            ");
-      System.out.println("       1. Play \n"+
-                         "       2. Setting\n"+
-                         "       3. Salir");
-      int option = sc.nextInt();
+      System.out.print  ("██           _____     _   _                           ██                                                      ██\n" +
+                         "██          /  _  \\ __| |_(_)___ _ __ ___     _        ██       1. PLAY       2. SETTINGS       3. SALIR       ██\n" +
+                         "██          | | || '_ | __| / _ | '_ / __|   (_)       ██                                                      ██\n" +
+                         "██          | |_|| |_)| |_| |(_)| | |\\__ \\    _        ██████████████████████████████████████████████████████████\n" +
+                         "██          \\____| .__\\___|_\\___|_| |____/   (_)       ██                                                      ██\n" +
+                         "██               |_|                                   ██       SELECT AN OPTION: ");int option = sc.nextInt();
+      System.out.print  ("██                                                     ██                                                      ██\n"+
+                         "█████████████████████████████████████████████████████████████████████████████████████████████████████████████████\n");
+
     
       switch(option){
         case 1: 
@@ -33,12 +45,15 @@ class Videojuego{
   }
 
   public static void play() {
-    System.out.println("          PLAYMODE         ");
-    System.out.println("       1. Player vs Player \n"+
-                       "       2. Player vs CPU \n"+
-                       "       3. CPU vs CPU (Just Testing Mode) \n"+
-                       "       4. Return");
-    int option = sc.nextInt();
+
+    System.out.print  ("██       ____  _            __  __        _                ██                                                  ██\n" + 
+                       "██      |  _ \\| |__ _ _   _|  \\/  |___ __| |___     _      ██  1. PLAYER vs PLAYER         4. RETURN           ██\n" + 
+                       "██      | |_) | / _` | | | | |\\/| / _ / _` / _ \\   (_)     ██                                                  ██\n" + 
+                       "██      |  __/|| (_| | |_| | |  | |(_)|(_||  __/    _      ██  2. PLAYER vs CPU (beta)  █████████████████████████\n" + 
+                       "██      |_|   |_\\__,_|\\__, |_|  |_\\___\\__,_\\___|   (_)     ██                           ██                     ██\n" + 
+                       "██                    |___/                                ██  3. CPU vs CPU (beta)     ██  SELECT AN OPTION: ");int option = sc.nextInt();
+    System.out.print  ("██                                                         ██                           ██                     ██\n"+
+                       "█████████████████████████████████████████████████████████████████████████████████████████████████████████████████\n");
 
     switch(option){
       case 1: 
@@ -93,6 +108,10 @@ class Videojuego{
 
     for(int i = 0; i >= 0; i++){
       board.mostrarInterfaz();
+
+      if(board.todosLosSoldadosMuertos()){
+        return;
+      }
 
       if(i % 2 == 0){
         System.out.println("     >---PLAYER 1 TURN---<");
