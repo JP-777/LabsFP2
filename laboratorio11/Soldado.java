@@ -2,10 +2,11 @@
 package com.mycompany.laboratorio11;
 import java.util.*;
 public class Soldado {
+    protected char tipoPieza;
     private String nombre;
     private int nivelAtaque;
     private int nivelDefensa;
-    private int nivelVida;
+    protected int nivelVida;
     private int vidaActual;
     private int velocidad;
     private String actitud;  
@@ -13,8 +14,6 @@ public class Soldado {
     private int columna;
     private boolean vive;
     public static int cantidadTotalSoldados = 0;
-    public static int cantidadEjercito1 = 0;
-    public static int cantidadEjercito2 = 0;
 
     public Soldado(String nombre, int nivelAtaque, int nivelDefensa, int nivelVida) {
         this.nombre = nombre;
@@ -38,31 +37,10 @@ public class Soldado {
         this.vive = true;
         this.fila = -1;  
         this.columna = -1; 
-        cantidadTotalSoldados++;
-        
-        // Incrementa el contador del ejército correspondiente
-        if (letra == 'A') {
-            cantidadEjercito1++;
-        } else if (letra == 'B') {
-            cantidadEjercito2++;
-        }
+        cantidadTotalSoldados++;       
     }
 
-    public Soldado(String nombre, int ataque, int defensa, int vida, int velocidad, String actitud, int fila, int columna) {
-        this.nombre = nombre;
-        this.nivelAtaque = ataque;
-        this.nivelDefensa = defensa;
-        this.nivelVida = vida;
-        this.vidaActual = vida;
-        this.velocidad = velocidad;
-        this.actitud = actitud;
-        this.vive = true;
-        this.fila = fila;
-        this.columna = columna;
-    }
-
-
-    private int generarAleatorio(int min, int max) {
+    protected int generarAleatorio(int min, int max) {
         Random random = new Random();
         return random.nextInt(max - min + 1) + min;
     }
@@ -203,13 +181,6 @@ public class Soldado {
         this.fila = fila;
         this.columna = columna;
     }
-    public static int getCantidadEjercito1() {
-        return cantidadEjercito1;
-    }
-
-    public static int getCantidadEjercito2() {
-        return cantidadEjercito2;
-    }
 
     public static int getCantidadTotalSoldados() {
         return cantidadTotalSoldados;
@@ -257,14 +228,6 @@ public class Soldado {
 
     public static void setCantidadTotalSoldados(int cantidadTotalSoldados) {
         Soldado.cantidadTotalSoldados = cantidadTotalSoldados;
-    }
-
-    public static void setCantidadEjercito1(int cantidadEjercito1) {
-        Soldado.cantidadEjercito1 = cantidadEjercito1;
-    }
-
-    public static void setCantidadEjercito2(int cantidadEjercito2) {
-        Soldado.cantidadEjercito2 = cantidadEjercito2;
     }
 
     @Override

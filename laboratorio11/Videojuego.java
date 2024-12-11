@@ -87,10 +87,10 @@ public class Videojuego {
         while (!juegoTerminado) {
             mostrarCantidadSoldadosPorEjercito();
             tablero.mostrarTablero();
-            System.out.println("Turno del Jugador 1 (Ejército 1):");
-            turnoJugador(tablero.getEjercito1());
+            System.out.println("Turno del Jugador 1 (Ejército X):");
+            turnoJugador(tablero.getEjercitoX());
 
-            if (tablero.getEjercito2().isEmpty()) {
+            if (tablero.getEjercitoY().isEmpty()) {
                 System.out.println("¡El Jugador 1 ha ganado!");
                 juegoTerminado = true;
                 break;
@@ -98,10 +98,10 @@ public class Videojuego {
 
             mostrarCantidadSoldadosPorEjercito();
             tablero.mostrarTablero();
-            System.out.println("Turno del Jugador 2 (Ejército 2):");
-            turnoJugador(tablero.getEjercito2());
+            System.out.println("Turno del Jugador 2 (Ejército Y):");
+            turnoJugador(tablero.getEjercitoY());
 
-            if (tablero.getEjercito1().isEmpty()) {
+            if (tablero.getEjercitoX().isEmpty()) {
                 System.out.println("¡El Jugador 2 ha ganado!");
                 juegoTerminado = true;
             }
@@ -129,8 +129,8 @@ public class Videojuego {
 
     private void mostrarCantidadSoldadosPorEjercito() {
         System.out.println("Cantidad de soldados por ejército:");
-        System.out.println("Ejército 1: " + Soldado.getCantidadEjercito1());
-        System.out.println("Ejército 2: " + Soldado.getCantidadEjercito2());
+        System.out.println("Ejército 1: " + tablero.getEjercito1().cantidadSoldado+ ", Reino: "+ tablero.getEjercito1().getReino());
+        System.out.println("Ejército 2: " + tablero.getEjercito2().cantidadSoldado+ ", Reino: "+ tablero.getEjercito2().getReino());
     }
 
     private void menuPrincipal() {
@@ -195,7 +195,7 @@ public class Videojuego {
             System.out.println("8. Ver Ejército");
             System.out.println("9. Sumar Niveles");
             System.out.println("10. Jugar");
-            System.out.println("11. Volver al menu principal(No se guardan los cambios)");
+            System.out.println("11. Volver al menu principal");
             System.out.print("Elige una opción: ");
             opcion = scanner.nextInt();
 
@@ -246,7 +246,7 @@ public class Videojuego {
         System.out.println("1. Ejército 1");
         System.out.println("2. Ejército 2");
         int eleccion = scanner.nextInt();
-        return eleccion == 1 ? tablero.getEjercito1() : tablero.getEjercito2();
+        return eleccion == 1 ? tablero.getEjercitoX() : tablero.getEjercitoY();
     }
 
     private void crearSoldado(ArrayList<Soldado> ejercito) {
@@ -256,13 +256,26 @@ public class Videojuego {
             System.out.println("El ejército ya tiene 10 soldados. No se pueden añadir más.");
             return;
         }
-        String nombre = ejercito == tablero.getEjercito1() ? "A" + ejercito.size() : "B" + ejercito.size();
+        String nombre = ejercito == tablero.getEjercitoX() ? "X" + ejercito.size() : "X" + ejercito.size();
         do {
                 fila = random.nextInt(10);
                 col = random.nextInt(10);
             } while (tablero.getTablero()[fila][col] != null);
-
-        Soldado nuevoSoldado = new Soldado(nombre, ejercito == tablero.getEjercito1() ? 'A' : 'B');
+        
+        int tipo= (int) (Math.random() * 3 + 1);
+        Soldado nuevoSoldado = new Soldado(nombre, ejercito == tablero.getEjercitoX() ? 'A' : 'B');
+        
+        switch (tipo) {
+            case 1:
+        nuevoSoldado = new Espadachin(nombre, ejercito == tablero.getEjercitoX() ? 'A' : 'B');
+              break;
+            case 2:
+        nuevoSoldado = new Arquero(nombre, ejercito == tablero.getEjercitoX() ? 'A' : 'B');
+              break;
+            case 3:
+        nuevoSoldado = new Caballero(nombre, ejercito == tablero.getEjercitoX() ? 'A' : 'B');
+              break;
+          }
         ejercito.add(nuevoSoldado);
         nuevoSoldado.setPosicion(fila, col);
         tablero.getTablero()[fila][col] = nuevoSoldado;
@@ -299,7 +312,7 @@ public class Videojuego {
             } while (tablero.getTablero()[fila][col] != null);
         Soldado soldadoClonado = ejercito.get(indice).clonar();
         ejercito.add(soldadoClonado);
-        String nombre = ejercito == tablero.getEjercito1() ? "A" + (ejercito.size()-1) : "B" + (ejercito.size()-1);
+        String nombre = ejercito == tablero.getEjercitoX() ? "X" + (ejercito.size()-1) : "Y" + (ejercito.size()-1);
         soldadoClonado.setNombre(nombre);
         soldadoClonado.setPosicion(fila, col);
         tablero.getTablero()[fila][col] = soldadoClonado;
@@ -361,6 +374,9 @@ public class Videojuego {
     }
 
     private void verSoldado(ArrayList<Soldado> ejercito) {
+        for (int i = 0; i < ejercito.size(); i++) {
+            System.out.println(i + ": " + ejercito.get(i).getNombre());
+        }
         System.out.print("Ingresa el nombre del soldado: ");
         String nombre = scanner.next();
 
