@@ -3,8 +3,8 @@ package com.mycompany.laboratorio11;
 import java.util.*;
 public class Tablero {
     private Soldado[][] tablero;
-    private Ejercitos ejercito1=new Ejercitos();
-    private Ejercitos ejercito2=new Ejercitos();
+    private Ejercitos ejercito1=new Ejercitos(1);
+    private Ejercitos ejercito2=new Ejercitos(2);
     private ArrayList<Soldado> ejercitoX;
     private ArrayList<Soldado> ejercitoY;
     private final int n = 10;

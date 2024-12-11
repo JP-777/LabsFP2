@@ -34,7 +34,9 @@ public class Caballero extends Soldado{
          this.armaActual = "Lanza";
           break;       
         }  
-        this.nivelVida = generarAleatorio(3, 5);
+        this.nivelAtaque=13;
+        this.nivelDefensa=7;
+        this.nivelVida = generarAleatorio(10,12);
         this.dañoAtaqueEnvestida = generarAleatorio(1,5);
         this.tipoPieza='C';
 

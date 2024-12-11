@@ -14,7 +14,9 @@ private int longitudEspada;
 
     public Espadachin(String nombre, char letra) {
         super(nombre, letra);
-        this.nivelVida = generarAleatorio(3, 4);
+        this.nivelAtaque=10;
+        this.nivelDefensa=8;
+        this.nivelVida = generarAleatorio(8, 10);
         this.longitudEspada = generarAleatorio(0,5);
         this.tipoPieza='E';
     }

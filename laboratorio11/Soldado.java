@@ -4,8 +4,8 @@ import java.util.*;
 public class Soldado {
     protected char tipoPieza;
     private String nombre;
-    private int nivelAtaque;
-    private int nivelDefensa;
+    protected int nivelAtaque;
+    protected int nivelDefensa;
     protected int nivelVida;
     private int vidaActual;
     private int velocidad;

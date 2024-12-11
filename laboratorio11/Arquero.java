@@ -14,7 +14,9 @@ public class Arquero extends Soldado {
 
     public Arquero(String nombre, char letra) {
         super(nombre, letra);
-        this.nivelVida = generarAleatorio(1, 3);
+        this.nivelAtaque=7;
+        this.nivelDefensa=3;
+        this.nivelVida = generarAleatorio(3, 5);
         this.numeroFlechas = generarAleatorio(1,10);
         this.tipoPieza='A';
 
