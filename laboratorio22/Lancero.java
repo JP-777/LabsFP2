@@ -22,7 +22,7 @@ public class Lancero extends Soldado{
  
  
  public void schiltrom(){
-  System.out.println("Se ha aumentado la defensa en 1");
+  System.out.println("LANCERO AUMENTA DEFENSA");
   this.nivelDefensa++;   
  }
 }
